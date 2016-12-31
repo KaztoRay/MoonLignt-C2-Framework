@@ -544,6 +544,289 @@ void manage_firewall(const char* action) {
     }
 }
 
+// Win32 GUI Desktop Environment
+#ifdef _WIN32
+#include <commctrl.h>
+#include <shellapi.h>
+
+#pragma comment(lib, "comctl32.lib")
+#pragma comment(lib, "shell32.lib")
+
+#define IDM_EXIT 1001
+#define IDM_TERMINAL 1002
+#define IDM_FILES 1003
+#define IDM_ABOUT 1004
+#define IDM_SECURITY 1005
+#define IDM_PROCESSES 1006
+#define IDM_NETWORK 1007
+#define IDM_EXPLOITS 1008
+
+HWND hwndDesktop = NULL;
+HWND hwndTerminal = NULL;
+HWND hwndTaskbar = NULL;
+HWND hwndOutput = NULL;
+bool desktop_running = false;
+
+// Window procedure for desktop
+LRESULT CALLBACK DesktopWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_CREATE: {
+            // Create menu bar
+            HMENU hMenu = CreateMenu();
+            HMENU hFileMenu = CreatePopupMenu();
+            HMENU hToolsMenu = CreatePopupMenu();
+            HMENU hHelpMenu = CreatePopupMenu();
+            
+            AppendMenu(hFileMenu, MF_STRING, IDM_TERMINAL, "Terminal");
+            AppendMenu(hFileMenu, MF_STRING, IDM_FILES, "File Manager");
+            AppendMenu(hFileMenu, MF_SEPARATOR, 0, NULL);
+            AppendMenu(hFileMenu, MF_STRING, IDM_EXIT, "Exit Desktop");
+            
+            AppendMenu(hToolsMenu, MF_STRING, IDM_SECURITY, "Security Dashboard");
+            AppendMenu(hToolsMenu, MF_STRING, IDM_PROCESSES, "Process Monitor");
+            AppendMenu(hToolsMenu, MF_STRING, IDM_NETWORK, "Network Analyzer");
+            AppendMenu(hToolsMenu, MF_STRING, IDM_EXPLOITS, "Exploit Console");
+            
+            AppendMenu(hHelpMenu, MF_STRING, IDM_ABOUT, "About");
+            
+            AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, "File");
+            AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hToolsMenu, "Tools");
+            AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hHelpMenu, "Help");
+            
+            SetMenu(hwnd, hMenu);
+            
+            // Create taskbar at bottom
+            hwndTaskbar = CreateWindowEx(
+                0, "STATIC", "",
+                WS_CHILD | WS_VISIBLE | SS_BLACKFRAME,
+                0, 0, 0, 0,
+                hwnd, NULL, GetModuleHandle(NULL), NULL
+            );
+            
+            // Create desktop label
+            CreateWindowEx(
+                0, "STATIC", 
+                "CardinalOS Desktop v4.0\r\nDouble-click icons to launch applications",
+                WS_CHILD | WS_VISIBLE | SS_CENTER,
+                50, 50, 400, 60,
+                hwnd, NULL, GetModuleHandle(NULL), NULL
+            );
+            
+            // Create desktop icons
+            CreateWindowEx(
+                0, "BUTTON", "Terminal",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                50, 150, 100, 80,
+                hwnd, (HMENU)IDM_TERMINAL, GetModuleHandle(NULL), NULL
+            );
+            
+            CreateWindowEx(
+                0, "BUTTON", "File Manager",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                170, 150, 100, 80,
+                hwnd, (HMENU)IDM_FILES, GetModuleHandle(NULL), NULL
+            );
+            
+            CreateWindowEx(
+                0, "BUTTON", "Security",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                290, 150, 100, 80,
+                hwnd, (HMENU)IDM_SECURITY, GetModuleHandle(NULL), NULL
+            );
+            
+            CreateWindowEx(
+                0, "BUTTON", "Processes",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                50, 250, 100, 80,
+                hwnd, (HMENU)IDM_PROCESSES, GetModuleHandle(NULL), NULL
+            );
+            
+            CreateWindowEx(
+                0, "BUTTON", "Network",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                170, 250, 100, 80,
+                hwnd, (HMENU)IDM_NETWORK, GetModuleHandle(NULL), NULL
+            );
+            
+            CreateWindowEx(
+                0, "BUTTON", "Exploits",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                290, 250, 100, 80,
+                hwnd, (HMENU)IDM_EXPLOITS, GetModuleHandle(NULL), NULL
+            );
+            
+            break;
+        }
+        
+        case WM_SIZE: {
+            // Resize taskbar
+            RECT rect;
+            GetClientRect(hwnd, &rect);
+            MoveWindow(hwndTaskbar, 0, rect.bottom - 40, rect.right, 40, TRUE);
+            break;
+        }
+        
+        case WM_COMMAND: {
+            switch (LOWORD(wParam)) {
+                case IDM_EXIT:
+                    desktop_running = false;
+                    PostQuitMessage(0);
+                    break;
+                    
+                case IDM_TERMINAL: {
+                    MessageBox(hwnd, 
+                        "Terminal window launched.\r\n\r\n"
+                        "Available commands:\r\n"
+                        "• ls, dir - List files\r\n"
+                        "• cd - Change directory\r\n"
+                        "• ifconfig, netstat - Network\r\n"
+                        "• ps, tasklist - Processes\r\n"
+                        "• exploit-db - Exploits",
+                        "Cardinal Terminal", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_FILES: {
+                    // Show file manager dialog
+                    char fileList[2048] = "Root Directories:\r\n\r\n";
+                    for (int i = 0; i < file_count && i < 20; i++) {
+                        if (files[i].is_directory && strchr(files[i].path + 1, '/') == NULL) {
+                            strcat(fileList, files[i].path);
+                            strcat(fileList, "\r\n");
+                        }
+                    }
+                    MessageBox(hwnd, fileList, "Cardinal File Manager", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_SECURITY: {
+                    char secMsg[512];
+                    sprintf(secMsg,
+                        "Security Status:\r\n\r\n"
+                        "Security Level: %s\r\n"
+                        "Firewall: %s\r\n"
+                        "SELinux: %s\r\n"
+                        "Audit: %s\r\n"
+                        "Encryption: AES-256-GCM\r\n"
+                        "Anti-Debug: ACTIVE",
+                        system_state.security_level == SECURITY_HIGH ? "HIGH" : "MEDIUM",
+                        system_state.firewall_enabled ? "ENABLED" : "DISABLED",
+                        system_state.selinux_enabled ? "ENFORCING" : "DISABLED",
+                        system_state.audit_enabled ? "ACTIVE" : "INACTIVE"
+                    );
+                    MessageBox(hwnd, secMsg, "Security Dashboard", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_PROCESSES: {
+                    char procList[2048] = "Running Processes:\r\n\r\n";
+                    char temp[128];
+                    for (int i = 0; i < process_count && i < 15; i++) {
+                        if (processes[i].is_running) {
+                            sprintf(temp, "PID %d: %s (%.1f%% CPU)\r\n", 
+                                   processes[i].pid, processes[i].name, processes[i].cpu_usage);
+                            strcat(procList, temp);
+                        }
+                    }
+                    MessageBox(hwnd, procList, "Process Monitor", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_NETWORK: {
+                    MessageBox(hwnd,
+                        "Network Interfaces:\r\n\r\n"
+                        "eth0: 192.168.1.100/24\r\n"
+                        "  Status: UP\r\n"
+                        "  RX: 8.9 MB\r\n"
+                        "  TX: 1.8 MB\r\n\r\n"
+                        "lo: 127.0.0.1/8\r\n"
+                        "  Status: UP\r\n"
+                        "  Loopback interface",
+                        "Network Analyzer", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_EXPLOITS: {
+                    MessageBox(hwnd,
+                        "Exploit Database (200+ CVEs):\r\n\r\n"
+                        "1. MS17-010 - EternalBlue SMB RCE [CRITICAL]\r\n"
+                        "2. MS08-067 - Windows Server RCE [CRITICAL]\r\n"
+                        "3. CVE-2021-44228 - Log4Shell RCE [CRITICAL]\r\n"
+                        "4. CVE-2014-0160 - Heartbleed SSL [HIGH]\r\n"
+                        "5. CVE-2017-5638 - Apache Struts2 RCE [CRITICAL]\r\n"
+                        "6. CVE-2019-0708 - BlueKeep RDP RCE [CRITICAL]\r\n"
+                        "7. CVE-2020-1472 - Zerologon Domain [CRITICAL]\r\n"
+                        "8. CVE-2021-26855 - ProxyLogon Exchange [CRITICAL]\r\n\r\n"
+                        "Use terminal 'exploit-db' for full list",
+                        "Exploit Console", MB_ICONINFORMATION);
+                    break;
+                }
+                
+                case IDM_ABOUT: {
+                    MessageBox(hwnd,
+                        "CardinalOS Enterprise Edition v4.0.0\r\n\r\n"
+                        "Advanced Security Research OS\r\n"
+                        "Linux + DOS + GUI Desktop\r\n\r\n"
+                        "Features:\r\n"
+                        "• 300+ Unified Commands\r\n"
+                        "• 200+ Exploit Database\r\n"
+                        "• C2 Framework\r\n"
+                        "• GUI Desktop Environment\r\n"
+                        "• ISO Generation\r\n\r\n"
+                        "Copyright © 2025 Cardinal Security Research Team",
+                        "About CardinalOS", MB_ICONINFORMATION);
+                    break;
+                }
+            }
+            break;
+        }
+        
+        case WM_PAINT: {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+            
+            // Draw desktop background
+            RECT rect;
+            GetClientRect(hwnd, &rect);
+            HBRUSH hBrush = CreateSolidBrush(RGB(30, 30, 40));
+            FillRect(hdc, &rect, hBrush);
+            DeleteObject(hBrush);
+            
+            // Draw taskbar background
+            RECT taskbarRect = {0, rect.bottom - 40, rect.right, rect.bottom};
+            HBRUSH hTaskbarBrush = CreateSolidBrush(RGB(20, 20, 30));
+            FillRect(hdc, &taskbarRect, hTaskbarBrush);
+            DeleteObject(hTaskbarBrush);
+            
+            // Draw taskbar text
+            SetBkMode(hdc, TRANSPARENT);
+            SetTextColor(hdc, RGB(0, 255, 255));
+            RECT textRect = {10, rect.bottom - 35, 400, rect.bottom - 5};
+            
+            char taskbarText[256];
+            time_t now = time(NULL);
+            struct tm* tm_info = localtime(&now);
+            sprintf(taskbarText, "CardinalOS | %s@%s | %02d:%02d:%02d", 
+                   current_user ? current_user->username : "root",
+                   system_state.hostname,
+                   tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec);
+            DrawText(hdc, taskbarText, -1, &textRect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+            
+            EndPaint(hwnd, &ps);
+            break;
+        }
+        
+        case WM_DESTROY:
+            desktop_running = false;
+            PostQuitMessage(0);
+            break;
+            
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
 void start_gui_desktop(void) {
     if (gui_mode) {
         printf("\033[93mGUI Desktop is already running\033[0m\n");
@@ -556,45 +839,84 @@ void start_gui_desktop(void) {
     printf("╚══════════════════════════════════════════════════════════╝\n");
     printf("\033[0m\n");
     
-    printf("Loading X11 Window Manager...\n");
-    sleep_ms(500);
-    printf("Initializing GTK+ 3.0 libraries...\n");
-    sleep_ms(500);
-    printf("Starting Cardinal Desktop Manager...\n");
-    sleep_ms(500);
-    printf("Loading theme engine (Dark Cardinal)...\n");
-    sleep_ms(500);
-    printf("Initializing panel and taskbar...\n");
-    sleep_ms(500);
-    printf("Starting file manager (Cardinal Files)...\n");
-    sleep_ms(500);
-    printf("Loading desktop widgets...\n");
-    sleep_ms(500);
-    printf("Initializing system tray...\n");
-    sleep_ms(500);
+    printf("Loading Win32 GUI subsystem...\n");
+    sleep_ms(300);
+    printf("Initializing window manager...\n");
+    sleep_ms(300);
+    printf("Creating desktop environment...\n");
+    sleep_ms(300);
+    printf("Loading taskbar and menu...\n");
+    sleep_ms(300);
+    printf("Initializing applications...\n");
+    sleep_ms(300);
     
     gui_mode = true;
     system_state.desktop_mode = true;
+    desktop_running = true;
     
-    printf("\n\033[92m✓ Desktop environment started successfully\033[0m\n");
-    printf("\033[96m");
-    printf("\nDesktop Features:\n");
-    printf("  • Window Manager: Cardinal WM\n");
-    printf("  • File Manager: Cardinal Files\n");
-    printf("  • Terminal: Cardinal Terminal\n");
-    printf("  • Task Manager: Cardinal Process Monitor\n");
-    printf("  • Exploit Console: Cardinal C2 GUI\n");
-    printf("  • Network Analyzer: Cardinal NetMon\n");
-    printf("  • Security Dashboard: Cardinal SecOps\n\n");
-    printf("\033[0m");
+    printf("\n\033[92m✓ Desktop GUI started\033[0m\n\n");
     
-    printf("\033[93mPress any key to return to terminal mode...\033[0m\n");
-    _getch();
+    // Register window class
+    WNDCLASSEX wc = {0};
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.lpfnWndProc = DesktopWndProc;
+    wc.hInstance = GetModuleHandle(NULL);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wc.lpszClassName = "CardinalDesktop";
+    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    
+    if (!RegisterClassEx(&wc)) {
+        printf("\033[91mFailed to register window class\033[0m\n");
+        gui_mode = false;
+        system_state.desktop_mode = false;
+        return;
+    }
+    
+    // Create desktop window
+    hwndDesktop = CreateWindowEx(
+        0,
+        "CardinalDesktop",
+        "CardinalOS Desktop v4.0 - Enterprise Edition",
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT,
+        1024, 768,
+        NULL, NULL,
+        GetModuleHandle(NULL),
+        NULL
+    );
+    
+    if (!hwndDesktop) {
+        printf("\033[91mFailed to create desktop window\033[0m\n");
+        gui_mode = false;
+        system_state.desktop_mode = false;
+        return;
+    }
+    
+    ShowWindow(hwndDesktop, SW_SHOW);
+    UpdateWindow(hwndDesktop);
+    
+    // Message loop
+    MSG msg;
+    while (desktop_running && GetMessage(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    
+    // Cleanup
+    DestroyWindow(hwndDesktop);
+    UnregisterClass("CardinalDesktop", GetModuleHandle(NULL));
     
     gui_mode = false;
     system_state.desktop_mode = false;
-    printf("\033[92mReturned to terminal mode\033[0m\n\n");
+    printf("\n\033[92mDesktop GUI closed\033[0m\n\n");
 }
+#else
+void start_gui_desktop(void) {
+    printf("\033[93mGUI Desktop is only available on Windows\033[0m\n");
+}
+#endif
 
 void generate_iso_image(void) {
     printf("\033[96m");
@@ -712,21 +1034,183 @@ void handle_command_advanced(char* input) {
     
     const char* cmd = args[0];
     
-    // Built-in commands
-    if (strcmp(cmd, "help") == 0) {
+    // DOS Commands
+    if (strcmp(cmd, "copy") == 0 || strcmp(cmd, "xcopy") == 0) {
+        if (argc < 3) {
+            printf("Usage: copy <source> <destination>\n");
+        } else {
+            printf("Copying %s to %s...\n", args[1], args[2]);
+            printf("1 file(s) copied.\n");
+        }
+    }
+    else if (strcmp(cmd, "del") == 0 || strcmp(cmd, "erase") == 0) {
+        if (argc < 2) {
+            printf("Usage: del <file>\n");
+        } else {
+            printf("Deleting %s...\n", args[1]);
+            audit_log("DELETE", args[1]);
+        }
+    }
+    else if (strcmp(cmd, "ren") == 0 || strcmp(cmd, "rename") == 0) {
+        if (argc < 3) {
+            printf("Usage: ren <oldname> <newname>\n");
+        } else {
+            printf("Renaming %s to %s...\n", args[1], args[2]);
+        }
+    }
+    else if (strcmp(cmd, "move") == 0) {
+        if (argc < 3) {
+            printf("Usage: move <source> <destination>\n");
+        } else {
+            printf("Moving %s to %s...\n", args[1], args[2]);
+            printf("1 file(s) moved.\n");
+        }
+    }
+    else if (strcmp(cmd, "attrib") == 0) {
+        if (argc < 2) {
+            printf("Usage: attrib [+R | -R] [+H | -H] <file>\n");
+        } else {
+            printf("Attributes for %s:\n", args[1]);
+            printf("  A  SH     %s\n", args[1]);
+        }
+    }
+    else if (strcmp(cmd, "tree") == 0) {
+        printf("\n");
+        printf("Folder PATH listing\n");
+        printf("Volume serial number is 1A2B-3C4D\n");
+        printf("%s\n", current_dir);
+        printf("│\n");
+        for (int i = 0; i < file_count && i < 10; i++) {
+            if (files[i].is_directory && strstr(files[i].path, current_dir) == files[i].path) {
+                printf("├───%s\n", files[i].name);
+            }
+        }
+        printf("\n");
+    }
+    else if (strcmp(cmd, "vol") == 0) {
+        printf(" Volume in drive C is CARDINAL\n");
+        printf(" Volume Serial Number is 1A2B-3C4D\n\n");
+    }
+    else if (strcmp(cmd, "label") == 0) {
+        printf("Volume in drive C is CARDINAL\n");
+        printf("Volume Serial Number is 1A2B-3C4D\n");
+        if (argc > 1) {
+            printf("Volume label changed to %s\n", args[1]);
+        }
+    }
+    else if (strcmp(cmd, "path") == 0) {
+        printf("PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin;C:\\WINDOWS\\system32;C:\\WINDOWS\n");
+    }
+    else if (strcmp(cmd, "prompt") == 0) {
+        printf("Current prompt: $P$G\n");
+    }
+    else if (strcmp(cmd, "doskey") == 0) {
+        printf("DOSKey installed.\n");
+        printf("Available macros:\n");
+        printf("  ll = ls -la\n");
+        printf("  .. = cd ..\n");
+        printf("  cls = clear\n");
+    }
+    else if (strcmp(cmd, "mem") == 0 || strcmp(cmd, "memory") == 0) {
+        printf("\nMemory Type        Total       Used       Free\n");
+        printf("────────────────────────────────────────────────\n");
+        printf("Conventional    %8zu  %8zu  %8zu\n", 
+               system_state.total_memory, 
+               system_state.used_memory,
+               system_state.total_memory - system_state.used_memory);
+        printf("Extended        %8zu  %8zu  %8zu\n",
+               system_state.total_memory,
+               system_state.used_memory / 2,
+               system_state.total_memory - system_state.used_memory / 2);
+        printf("Total memory    %8zu KB\n\n", system_state.total_memory / 1024);
+    }
+    else if (strcmp(cmd, "chkdsk") == 0 || strcmp(cmd, "scandisk") == 0) {
+        printf("\nChecking disk...\n\n");
+        printf("The type of the file system is EXT4.\n");
+        printf("Volume label is CARDINAL.\n\n");
+        sleep_ms(500);
+        printf("Stage 1: Examining basic file system structure...\n");
+        sleep_ms(800);
+        printf("  512 file records processed.\n");
+        sleep_ms(500);
+        printf("\nStage 2: Examining file name linkage...\n");
+        sleep_ms(800);
+        printf("  612 index entries processed.\n");
+        sleep_ms(500);
+        printf("\nStage 3: Examining security descriptors...\n");
+        sleep_ms(800);
+        printf("  Security descriptors verified.\n\n");
+        printf("Windows has scanned the file system and found no problems.\n");
+        printf("No further action is required.\n\n");
+        printf("  536870912 KB total disk space.\n");
+        printf("  257294336 KB in 512 files.\n");
+        printf("  279576576 KB available.\n\n");
+    }
+    else if (strcmp(cmd, "format") == 0) {
+        if (argc < 2) {
+            printf("Usage: format <drive>\n");
+        } else {
+            printf("\033[91mWARNING: ALL DATA ON %s WILL BE LOST!\033[0m\n", args[1]);
+            printf("Proceed with Format (Y/N)? ");
+            printf("N\n[Cancelled]\n");
+        }
+    }
+    else if (strcmp(cmd, "diskpart") == 0) {
+        printf("\nMicrosoft DiskPart version 10.0.19041.1\n\n");
+        printf("DISKPART> list disk\n\n");
+        printf("  Disk ###  Status         Size     Free     Dyn  Gpt\n");
+        printf("  ────────  ─────────────  ───────  ───────  ───  ───\n");
+        printf("  Disk 0    Online          512 GB   245 GB        *\n\n");
+    }
+    else if (strcmp(cmd, "comp") == 0 || strcmp(cmd, "fc") == 0) {
+        if (argc < 3) {
+            printf("Usage: %s <file1> <file2>\n", cmd);
+        } else {
+            printf("Comparing files %s and %s...\n", args[1], args[2]);
+            printf("FC: no differences encountered\n");
+        }
+    }
+    else if (strcmp(cmd, "find") == 0 || strcmp(cmd, "findstr") == 0) {
+        if (argc < 2) {
+            printf("Usage: %s <pattern> [files]\n", cmd);
+        } else {
+            printf("Searching for \"%s\"...\n", args[1]);
+            printf("No matches found.\n");
+        }
+    }
+    else if (strcmp(cmd, "more") == 0 || strcmp(cmd, "less") == 0) {
+        if (argc < 2) {
+            printf("Usage: %s <file>\n", cmd);
+        } else {
+            file_t* file = find_file(args[1]);
+            if (file && !file->is_directory) {
+                printf("%s", file->content);
+                printf("\n-- More --\n");
+            } else {
+                printf("File not found: %s\n", args[1]);
+            }
+        }
+    }
+    else if (strcmp(cmd, "sort") == 0) {
+        printf("Sorting...\n");
+        printf("(Lines would be sorted alphabetically)\n");
+    }
+    else if (strcmp(cmd, "help") == 0 || strcmp(cmd, "?") == 0) {
         printf("\n\033[96m╔══════════════════════════════════════════════════════════╗\n");
         printf("║              CardinalOS v4.0 Command Reference           ║\n");
         printf("╚══════════════════════════════════════════════════════════╝\033[0m\n\n");
         
-        printf("\033[93mSystem Commands:\033[0m\n");
-        printf("  help              - Show this help\n");
-        printf("  version           - Display version info\n");
+        printf("\033[93mSystem Commands (Linux/Unix/DOS):\033[0m\n");
+        printf("  help, ?           - Show this help\n");
+        printf("  version, ver      - Display version info\n");
         printf("  uname             - Print system information\n");
         printf("  hostname          - Show/set hostname\n");
         printf("  uptime            - Show system uptime\n");
-        printf("  reboot/shutdown   - Restart or shutdown system\n\n");
+        printf("  reboot/shutdown   - Restart or shutdown system\n");
+        printf("  date, time        - Show date/time\n");
+        printf("  cls, clear        - Clear screen\n\n");
         
-        printf("\033[93mFile Operations:\033[0m\n");
+        printf("\033[93mFile Operations (Linux/Unix):\033[0m\n");
         printf("  ls [path]         - List directory contents\n");
         printf("  cd <path>         - Change directory\n");
         printf("  pwd               - Print working directory\n");
@@ -735,26 +1219,83 @@ void handle_command_advanced(char* input) {
         printf("  cat <file>        - Display file content\n");
         printf("  rm <file>         - Remove file\n");
         printf("  cp <src> <dst>    - Copy file\n");
-        printf("  mv <src> <dst>    - Move/rename file\n\n");
+        printf("  mv <src> <dst>    - Move/rename file\n");
+        printf("  ln <src> <dst>    - Create link\n");
+        printf("  chmod <mode> <f>  - Change permissions\n");
+        printf("  chown <user> <f>  - Change owner\n");
+        printf("  find <pattern>    - Search files\n");
+        printf("  grep <pattern>    - Search in files\n");
+        printf("  head, tail <file> - View file parts\n");
+        printf("  more, less <file> - Page through file\n");
+        printf("  diff <f1> <f2>    - Compare files\n\n");
+        
+        printf("\033[93mFile Operations (DOS):\033[0m\n");
+        printf("  dir [path]        - List directory (DOS)\n");
+        printf("  cd, chdir <path>  - Change directory (DOS)\n");
+        printf("  md, mkdir <dir>   - Create directory (DOS)\n");
+        printf("  rd, rmdir <dir>   - Remove directory (DOS)\n");
+        printf("  copy <src> <dst>  - Copy file (DOS)\n");
+        printf("  xcopy <src> <dst> - Extended copy (DOS)\n");
+        printf("  move <src> <dst>  - Move file (DOS)\n");
+        printf("  del, erase <file> - Delete file (DOS)\n");
+        printf("  ren <old> <new>   - Rename file (DOS)\n");
+        printf("  type <file>       - Display file (DOS)\n");
+        printf("  attrib [+/-RH] <f>- File attributes (DOS)\n");
+        printf("  tree              - Display tree (DOS)\n");
+        printf("  comp, fc <f1> <f2>- Compare files (DOS)\n");
+        printf("  find, findstr <p> - Find string (DOS)\n");
+        printf("  sort              - Sort text (DOS)\n\n");
         
         printf("\033[93mUser Management:\033[0m\n");
         printf("  whoami            - Print current user\n");
         printf("  users             - List all users\n");
         printf("  su <user>         - Switch user\n");
         printf("  sudo <cmd>        - Execute as admin\n");
-        printf("  passwd            - Change password\n\n");
+        printf("  passwd            - Change password\n");
+        printf("  id                - Display user identity\n");
+        printf("  groups            - Show user groups\n\n");
         
-        printf("\033[93mProcess Management:\033[0m\n");
+        printf("\033[93mProcess Management (Linux/Unix):\033[0m\n");
         printf("  ps                - List processes\n");
         printf("  top               - Process monitor\n");
         printf("  kill <pid>        - Terminate process\n");
-        printf("  killall <name>    - Kill by name\n\n");
+        printf("  killall <name>    - Kill by name\n");
+        printf("  bg, fg            - Background/foreground\n");
+        printf("  jobs              - List jobs\n\n");
         
-        printf("\033[93mNetwork Commands:\033[0m\n");
+        printf("\033[93mProcess Management (DOS):\033[0m\n");
+        printf("  tasklist          - List processes (DOS)\n");
+        printf("  taskkill <pid>    - Kill process (DOS)\n");
+        printf("  start <prog>      - Start program (DOS)\n\n");
+        
+        printf("\033[93mDisk Management (DOS):\033[0m\n");
+        printf("  chkdsk, scandisk  - Check disk\n");
+        printf("  format <drive>    - Format disk\n");
+        printf("  diskpart          - Disk partition tool\n");
+        printf("  vol               - Volume information\n");
+        printf("  label             - Set volume label\n");
+        printf("  mem, memory       - Memory information\n");
+        printf("  path              - Show/set PATH\n");
+        printf("  prompt            - Show prompt\n");
+        printf("  doskey            - Keyboard macros\n\n");
+        
+        printf("\033[93mNetwork Commands (Linux/Unix):\033[0m\n");
         printf("  ifconfig          - Network interfaces\n");
         printf("  netstat           - Network connections\n");
         printf("  ping <host>       - Test connectivity\n");
-        printf("  traceroute <host> - Trace route\n\n");
+        printf("  traceroute <host> - Trace route\n");
+        printf("  nslookup <host>   - DNS lookup\n");
+        printf("  dig <host>        - DNS query\n");
+        printf("  route             - Show routing table\n");
+        printf("  arp               - ARP table\n");
+        printf("  nc <host> <port>  - Netcat\n");
+        printf("  curl <url>        - Transfer data\n");
+        printf("  wget <url>        - Download file\n\n");
+        
+        printf("\033[93mNetwork Commands (DOS):\033[0m\n");
+        printf("  ipconfig          - IP configuration (DOS)\n");
+        printf("  tracert <host>    - Trace route (DOS)\n");
+        printf("  net <cmd>         - Network commands (DOS)\n\n");
         
         printf("\033[93mSecurity Commands:\033[0m\n");
         printf("  security          - Security status\n");
