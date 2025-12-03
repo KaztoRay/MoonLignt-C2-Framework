@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - 네트워크 암호화 모듈 (C 구현)
+ * Cardinal C2 Framework - 네트워크 암호화 모듈 (C 구현)
  * RC4, XOR 암호화 및 네트워크 통신 함수
  * 원본 어셈블리를 C로 변환
  */

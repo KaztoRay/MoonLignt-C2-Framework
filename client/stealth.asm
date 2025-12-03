@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - 스텔스 모듈 (x86 어셈블리)
+; Cardinal C2 Framework - 스텔스 모듈 (x86 어셈블리)
 ; 고급 안티 디버깅, 안티 VM, 프로세스 숨김 기법
 ; NASM으로 어셈블: nasm -f win32 stealth.asm -o stealth.obj
 

@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - Advanced Control Module
+; Cardinal C2 Framework - Advanced Control Module
 ; Remote desktop, file operations, registry manipulation, service control
 ; x86 Assembly (NASM syntax for win32)
 

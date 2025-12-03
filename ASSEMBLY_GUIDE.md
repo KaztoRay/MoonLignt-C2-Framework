@@ -1,8 +1,8 @@
-# Moonlight C2 Framework - Assembly Enhancement Documentation
+# Cardinal C2 Framework - Assembly Enhancement Documentation
 
 ## Overview
 
-The Moonlight C2 Framework has been enhanced with advanced x86 assembly modules to provide:
+The Cardinal C2 Framework has been enhanced with advanced x86 assembly modules to provide:
 - **Anti-Analysis**: Debugger detection, VM detection, sandbox detection
 - **Stealth Operations**: Direct syscalls bypassing usermode hooks
 - **Performance**: Optimized encryption and networking routines
@@ -185,7 +185,7 @@ cd client
 make enhanced
 
 # Run (connects to 192.168.1.100:4444)
-.\build\moonlight-implant-enhanced.exe
+.\build\Cardinal-implant-enhanced.exe
 ```
 
 ---
@@ -214,7 +214,7 @@ cd server
 make enhanced
 
 # Run server
-.\build\moonlight-server-enhanced.exe
+.\build\Cardinal-server-enhanced.exe
 ```
 
 ---
@@ -424,7 +424,7 @@ This framework is for **authorized penetration testing and research purposes onl
 
 ## Credits
 
-**Moonlight C2 Framework v2.0**
+**Cardinal C2 Framework v2.0**
 - Assembly optimization
 - Anti-analysis techniques
 - Direct syscall implementation

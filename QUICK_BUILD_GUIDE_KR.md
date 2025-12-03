@@ -1,4 +1,4 @@
-# Moonlight C2 Framework - 빠른 빌드 가이드 (한국어)
+# Cardinal C2 Framework - 빠른 빌드 가이드 (한국어)
 
 ## 📋 필수 요구사항
 
@@ -146,9 +146,9 @@ nasm -v
 
 ```
 bin/
-├── moonlight-implant-enhanced.exe    # 클라이언트 (타겟 시스템용)
-├── moonlight-server-enhanced.exe     # C2 서버
-├── MoonlightC2-GUI.exe               # GUI 인터페이스
+├── Cardinal-implant-enhanced.exe    # 클라이언트 (타겟 시스템용)
+├── Cardinal-server-enhanced.exe     # C2 서버
+├── CardinalC2-GUI.exe               # GUI 인터페이스
 ├── shellcode.bin                     # 쉘코드
 └── exploits/                         # Exploit 모듈들
     ├── ms08-067.exe
@@ -164,7 +164,7 @@ bin/
 ### 1. 서버 시작
 
 ```powershell
-.\bin\moonlight-server-enhanced.exe
+.\bin\Cardinal-server-enhanced.exe
 ```
 
 기본 포트: 4444
@@ -172,7 +172,7 @@ bin/
 ### 2. GUI 실행 (선택사항)
 
 ```powershell
-.\bin\MoonlightC2-GUI.exe
+.\bin\CardinalC2-GUI.exe
 ```
 
 ### 3. 클라이언트 배포
@@ -180,7 +180,7 @@ bin/
 타겟 시스템에서:
 
 ```powershell
-.\bin\moonlight-implant-enhanced.exe
+.\bin\Cardinal-implant-enhanced.exe
 ```
 
 **주의**: 서버 IP는 `client/implant_enhanced.c` 파일에서 수정해야 합니다:

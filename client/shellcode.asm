@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - Shellcode Component
+; Cardinal C2 Framework - Shellcode Component
 ; Target: Windows XP/2000/95/Server 2003/2008
 ; Architecture: x86 (32-bit)
 ;

@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - GUI 서버 (해커 테마)
+ * Cardinal C2 Framework - GUI 서버 (해커 테마)
  * 타겟: Windows 7+
  * 기능: 세션 관리, 실시간 모니터링, Exploit 런처, 스크린샷 뷰어
  */
@@ -119,7 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     wc.hInstance = hInstance;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = CreateSolidBrush(COLOR_BG_DARK);
-    wc.lpszClassName = "MoonlightC2Class";
+    wc.lpszClassName = "CardinalC2Class";
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     
@@ -131,8 +131,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     // 메인 윈도우 생성
     g_hMainWindow = CreateWindowEx(
         0,
-        "MoonlightC2Class",
-        "∴ Moonlight C2 Framework ∴ [HACKER MODE]",
+        "CardinalC2Class",
+        "∴ Cardinal C2 Framework ∴ [HACKER MODE]",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT,
         1400, 900,
@@ -188,7 +188,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
         case WM_CREATE:
             InitializeGUI(hwnd);
-            AddLogMessage("[*] Moonlight C2 Framework initialized", COLOR_ACCENT);
+            AddLogMessage("[*] Cardinal C2 Framework initialized", COLOR_ACCENT);
             AddLogMessage("[*] Ready to start C2 server...", COLOR_TEXT);
             break;
             
@@ -270,11 +270,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     
                 case IDM_HELP_ABOUT:
                     MessageBox(hwnd, 
-                              "Moonlight C2 Framework v2.0\n\n"
+                              "Cardinal C2 Framework v2.0\n\n"
                               "Advanced Command & Control System\n"
                               "For Authorized Penetration Testing Only\n\n"
                               "⚠ Use Responsibly ⚠",
-                              "About Moonlight C2",
+                              "About Cardinal C2",
                               MB_ICONINFORMATION);
                     break;
             }

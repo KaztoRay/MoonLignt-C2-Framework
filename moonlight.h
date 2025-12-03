@@ -80,4 +80,4 @@ ClientSession* GetClientSession(SessionManager* mgr, int session_id);
 void SendToClient(SessionManager* mgr, int session_id, const char* data);
 void BroadcastToAllClients(SessionManager* mgr, const char* data);
 
-#endif // MOONLIGHT_H
+#endif // CARDINAL_H

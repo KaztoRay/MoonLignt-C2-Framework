@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - Direct Syscall Module (x86 Assembly)
+; Cardinal C2 Framework - Direct Syscall Module (x86 Assembly)
 ; Bypass usermode hooks by making direct syscalls to kernel
 ; Assemble with NASM: nasm -f win32 syscalls.asm -o syscalls.obj
 

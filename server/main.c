@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - 서버 컴포넌트
+ * Cardinal C2 Framework - 서버 컴포넌트
  * 타겟: Windows XP/2000/95/Server 2003/2008
  * 목적: 침투 테스트 및 레드팀 작전
  * 
@@ -277,7 +277,7 @@ void DisplayBanner() {
     printf("  ██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║███████╗██║╚██████╔╝██║  ██║   ██║   \n");
     printf("  ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   \n");
     printf("\n");
-    printf("  Moonlight C2 Framework v3.0 (Pure C + GUI)\n");
+    printf("  Cardinal C2 Framework v3.0 (Pure C + GUI)\n");
     printf("  레거시 Windows 명령 및 제어 시스템\n");
     printf("  승인된 침투 테스트 전용\n");
     printf("\n");

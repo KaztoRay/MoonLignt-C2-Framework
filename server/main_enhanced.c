@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - Enhanced Server with Assembly Integration
+ * Cardinal C2 Framework - Enhanced Server with Assembly Integration
  * High-performance multi-threaded C2 server with encryption
  */
 
@@ -15,7 +15,7 @@
 #define SERVER_PORT 4444
 #define MAX_CLIENTS 100
 #define BUFFER_SIZE 8192
-#define ENCRYPTION_KEY "MoonlightC2SecretKey2025"
+#define ENCRYPTION_KEY "CardinalC2SecretKey2025"
 
 // Assembly function declarations
 extern void asm_rc4_init(unsigned char* S, const char* key, size_t key_length);
@@ -358,7 +358,7 @@ int main(int argc, char* argv[]) {
     int client_len;
     
     printf("========================================\n");
-    printf("Moonlight C2 Enhanced Server v2.0\n");
+    printf("Cardinal C2 Enhanced Server v2.0\n");
     printf("With Assembly-Optimized Encryption\n");
     printf("========================================\n\n");
     

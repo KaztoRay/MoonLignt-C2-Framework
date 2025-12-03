@@ -1,6 +1,6 @@
-# Moonlight C2 Framework - Build Guide
+# Cardinal C2 Framework - Build Guide
 
-Complete guide for building Moonlight C2 Framework on Windows with MinGW-w64 and NASM.
+Complete guide for building Cardinal C2 Framework on Windows with MinGW-w64 and NASM.
 
 ---
 
@@ -135,7 +135,7 @@ gcc -m32 -c implant_enhanced.c -o build\obj\implant_enhanced.o -Wall -O2
 gcc -m32 -c monitoring_control.c -o build\obj\monitoring_control.o -Wall -O2
 
 # Link everything
-gcc -m32 -o build\moonlight-implant-enhanced.exe `
+gcc -m32 -o build\Cardinal-implant-enhanced.exe `
     build\obj\implant_enhanced.o `
     build\obj\monitoring_control.o `
     build\obj\stealth.obj `
@@ -164,7 +164,7 @@ nasm -f win32 network_asm.asm -o build\obj\network_asm.obj
 gcc -m32 -c main_enhanced.c -o build\obj\main_enhanced.o -Wall -O2 -DMAX_CLIENTS=100
 
 # Link
-gcc -m32 -o build\moonlight-server-enhanced.exe `
+gcc -m32 -o build\Cardinal-server-enhanced.exe `
     build\obj\main_enhanced.o `
     build\obj\network_asm.obj `
     -lws2_32 -lpthread -s
@@ -177,7 +177,7 @@ cd gui
 
 # Compile GUI
 gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0501 -mwindows `
-    main.c -o MoonlightC2-GUI.exe `
+    main.c -o CardinalC2-GUI.exe `
     -lcomctl32 -lws2_32 -lgdi32 -lcomdlg32 -s
 ```
 
@@ -230,7 +230,7 @@ gcc -m32 -c implant_enhanced.c -o build\obj\implant_enhanced.o -Wall -O2
 gcc -m32 -c monitoring_control.c -o build\obj\monitoring_control.o -Wall -O2
 
 echo [*] Linking...
-gcc -m32 -o build\moonlight-implant-enhanced.exe ^
+gcc -m32 -o build\Cardinal-implant-enhanced.exe ^
     build\obj\implant_enhanced.o ^
     build\obj\monitoring_control.o ^
     build\obj\stealth.obj ^
@@ -258,7 +258,7 @@ echo [*] Compiling C source...
 gcc -m32 -c main_enhanced.c -o build\obj\main_enhanced.o -Wall -O2
 
 echo [*] Linking...
-gcc -m32 -o build\moonlight-server-enhanced.exe ^
+gcc -m32 -o build\Cardinal-server-enhanced.exe ^
     build\obj\main_enhanced.o ^
     build\obj\network_asm.obj ^
     -lws2_32 -lpthread -s
@@ -273,7 +273,7 @@ echo [+] Server build complete!
 echo Building GUI...
 
 gcc -Wall -O2 -DWIN32 -D_WIN32_WINNT=0x0501 -mwindows ^
-    main.c -o MoonlightC2-GUI.exe ^
+    main.c -o CardinalC2-GUI.exe ^
     -lcomctl32 -lws2_32 -lgdi32 -lcomdlg32 -s
 
 echo [+] GUI build complete!
@@ -358,16 +358,16 @@ nasm -f win32 ...
 
 ```powershell
 # Check if executable is 32-bit
-Get-Item bin\moonlight-implant-enhanced.exe | Select-Object -ExpandProperty Length
+Get-Item bin\Cardinal-implant-enhanced.exe | Select-Object -ExpandProperty Length
 
 # File should be around 100-150 KB
 
 # Check dependencies
-dumpbin /dependents bin\moonlight-implant-enhanced.exe
+dumpbin /dependents bin\Cardinal-implant-enhanced.exe
 # Should show: KERNEL32.dll, WS2_32.dll, ADVAPI32.dll, etc.
 
 # Test run (will try to connect to C2)
-.\bin\moonlight-implant-enhanced.exe
+.\bin\Cardinal-implant-enhanced.exe
 ```
 
 ---
@@ -437,18 +437,18 @@ sudo pacman -S mingw-w64-gcc nasm
 
 ```bash
 # Client
-i686-w64-mingw32-gcc -m32 -o moonlight-implant.exe \
+i686-w64-mingw32-gcc -m32 -o Cardinal-implant.exe \
     implant_enhanced.c \
     stealth.obj syscalls.obj network_asm.obj \
     -lws2_32 -ladvapi32 -s
 
 # Server
-i686-w64-mingw32-gcc -m32 -o moonlight-server.exe \
+i686-w64-mingw32-gcc -m32 -o Cardinal-server.exe \
     main_enhanced.c network_asm.obj \
     -lws2_32 -lpthread -s
 
 # GUI
-i686-w64-mingw32-gcc -m32 -mwindows -o MoonlightC2-GUI.exe \
+i686-w64-mingw32-gcc -m32 -mwindows -o CardinalC2-GUI.exe \
     main.c \
     -lcomctl32 -lws2_32 -lgdi32 -s
 ```
@@ -466,14 +466,14 @@ i686-w64-mingw32-gcc -m32 -mwindows -o MoonlightC2-GUI.exe \
 # Package release
 .\Build-All.ps1 -Package
 
-# Output: release\moonlight-c2-YYYYMMDD-HHMMSS.zip
+# Output: release\Cardinal-c2-YYYYMMDD-HHMMSS.zip
 ```
 
 ### Manual Packaging
 
 ```powershell
 # Create release directory
-$release = "release\moonlight-c2-v2.0"
+$release = "release\Cardinal-c2-v2.0"
 New-Item -ItemType Directory -Force -Path $release
 
 # Copy binaries
@@ -495,7 +495,7 @@ Compress-Archive -Path $release -DestinationPath "$release.zip"
 ```powershell
 # Quick rebuild and test
 cd client
-make enhanced && ..\bin\moonlight-implant-enhanced.exe
+make enhanced && ..\bin\Cardinal-implant-enhanced.exe
 ```
 
 ### Debugging Assembly
@@ -512,10 +512,10 @@ Get-Content stealth.lst
 
 ```powershell
 # Check section sizes
-dumpbin /headers bin\moonlight-implant-enhanced.exe
+dumpbin /headers bin\Cardinal-implant-enhanced.exe
 
 # Identify large symbols
-nm -S -C bin\moonlight-implant-enhanced.exe | Sort-Object -Descending
+nm -S -C bin\Cardinal-implant-enhanced.exe | Sort-Object -Descending
 ```
 
 ### Clean Build
@@ -535,13 +535,13 @@ After successful build:
 1. **Test Components**:
    ```powershell
    # Start server
-   .\bin\moonlight-server-enhanced.exe
+   .\bin\Cardinal-server-enhanced.exe
    
    # In another terminal, run implant
-   .\bin\moonlight-implant-enhanced.exe
+   .\bin\Cardinal-implant-enhanced.exe
    
    # Launch GUI
-   .\bin\MoonlightC2-GUI.exe
+   .\bin\CardinalC2-GUI.exe
    ```
 
 2. **Read Documentation**:
@@ -574,5 +574,5 @@ For build issues:
 
 ---
 
-**Moonlight C2 Framework Build Guide**  
+**Cardinal C2 Framework Build Guide**  
 Version 2.0 | Build Date: 2025

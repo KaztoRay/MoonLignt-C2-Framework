@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - 스텔스 모듈 (C 구현)
+ * Cardinal C2 Framework - 스텔스 모듈 (C 구현)
  * 고급 안티 디버깅, 안티 VM, 프로세스 숨김 기법
  * 원본 어셈블리를 C로 변환
  */

@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - Main GUI (Win32 API)
+ * Cardinal C2 Framework - Main GUI (Win32 API)
  * Native Windows application written in C
  */
 
@@ -90,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName = NULL;
-    wc.lpszClassName = "MoonlightC2Class";
+    wc.lpszClassName = "CardinalC2Class";
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     
     if (!RegisterClassEx(&wc)) {
@@ -101,8 +101,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Create main window
     g_hMainWindow = CreateWindowEx(
         WS_EX_CLIENTEDGE,
-        "MoonlightC2Class",
-        "Moonlight C2 Framework v2.0",
+        "CardinalC2Class",
+        "Cardinal C2 Framework v2.0",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT,
         WINDOW_WIDTH, WINDOW_HEIGHT,

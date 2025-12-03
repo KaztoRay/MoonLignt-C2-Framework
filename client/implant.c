@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - 클라이언트 임플란트
+ * Cardinal C2 Framework - 클라이언트 임플란트
  * 타겟: Windows XP/2000/95/Server 2003/2008
  * 목적: 침투 테스트 및 레드팀 작전
  * 

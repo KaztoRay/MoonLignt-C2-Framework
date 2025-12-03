@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - Advanced Monitoring Module
+; Cardinal C2 Framework - Advanced Monitoring Module
 ; Target system monitoring, keylogging, screen capture, process control
 ; x86 Assembly (NASM syntax for win32)
 

@@ -1,4 +1,4 @@
-; Moonlight C2 Framework - Assembly Network Module
+; Cardinal C2 Framework - Assembly Network Module
 ; Low-level networking and encryption routines
 ; Assemble with NASM: nasm -f win32 network_asm.asm -o network_asm.obj
 

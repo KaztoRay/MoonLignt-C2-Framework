@@ -1,5 +1,5 @@
 /*
- * Moonlight C2 Framework - Complete Monitoring & Control System
+ * Cardinal C2 Framework - Complete Monitoring & Control System
  * Integrates all monitoring and control capabilities
  */
 
@@ -459,7 +459,7 @@ void DispatchMonitoringCommand(SOCKET sock, const char* command) {
 void ShowMonitoringHelp(SOCKET sock) {
     const char* help = 
         "\n"
-        "=== Moonlight C2 Monitoring & Control Commands ===\n"
+        "=== Cardinal C2 Monitoring & Control Commands ===\n"
         "\n"
         "KEYLOGGING:\n"
         "  keylog start              - Start keylogger\n"
