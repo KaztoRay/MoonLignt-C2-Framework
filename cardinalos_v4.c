@@ -922,6 +922,238 @@ void handle_command_advanced(char* input) {
     else if (strcmp(cmd, "iso-generate") == 0 || strcmp(cmd, "mkiso") == 0) {
         generate_iso_image();
     }
+    else if (strcmp(cmd, "ifconfig") == 0 || strcmp(cmd, "ipconfig") == 0) {
+        printf("\n\033[96mNetwork Interfaces:\033[0m\n\n");
+        printf("eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n");
+        printf("        inet 192.168.1.100  netmask 255.255.255.0  broadcast 192.168.1.255\n");
+        printf("        inet6 fe80::a00:27ff:fe4e:66a1  prefixlen 64  scopeid 0x20<link>\n");
+        printf("        ether 08:00:27:4e:66:a1  txqueuelen 1000  (Ethernet)\n");
+        printf("        RX packets 12847  bytes 8932047 (8.9 MB)\n");
+        printf("        TX packets 7234  bytes 1892374 (1.8 MB)\n\n");
+        printf("lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n");
+        printf("        inet 127.0.0.1  netmask 255.0.0.0\n");
+        printf("        inet6 ::1  prefixlen 128  scopeid 0x10<host>\n");
+        printf("        loop  txqueuelen 1000  (Local Loopback)\n");
+        printf("        RX packets 1024  bytes 102400 (100.0 KB)\n");
+        printf("        TX packets 1024  bytes 102400 (100.0 KB)\n\n");
+    }
+    else if (strcmp(cmd, "netstat") == 0) {
+        printf("\n\033[96mActive Internet connections:\033[0m\n");
+        printf("Proto Recv-Q Send-Q Local Address           Foreign Address         State\n");
+        printf("tcp        0      0 0.0.0.0:4444            0.0.0.0:*               LISTEN\n");
+        printf("tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN\n");
+        printf("tcp        0      0 192.168.1.100:4444      192.168.1.50:49234      ESTABLISHED\n");
+        printf("udp        0      0 0.0.0.0:53              0.0.0.0:*\n");
+        printf("udp        0      0 0.0.0.0:67              0.0.0.0:*\n\n");
+    }
+    else if (strcmp(cmd, "ping") == 0) {
+        const char* host = argc > 1 ? args[1] : "8.8.8.8";
+        printf("\n\033[96mPING %s (8.8.8.8) 56(84) bytes of data.\033[0m\n", host);
+        for (int i = 0; i < 4; i++) {
+            printf("64 bytes from %s: icmp_seq=%d ttl=64 time=%d.%d ms\n", 
+                   host, i+1, 10 + (rand() % 40), rand() % 1000);
+            sleep_ms(1000);
+        }
+        printf("\n--- %s ping statistics ---\n", host);
+        printf("4 packets transmitted, 4 received, 0%% packet loss, time 3003ms\n");
+        printf("rtt min/avg/max/mdev = 10.234/25.456/48.789/12.345 ms\n\n");
+    }
+    else if (strcmp(cmd, "traceroute") == 0 || strcmp(cmd, "tracert") == 0) {
+        const char* host = argc > 1 ? args[1] : "8.8.8.8";
+        printf("\n\033[96mtraceroute to %s (8.8.8.8), 30 hops max, 60 byte packets\033[0m\n", host);
+        printf(" 1  192.168.1.1 (192.168.1.1)  1.234 ms  1.123 ms  1.089 ms\n");
+        printf(" 2  10.0.0.1 (10.0.0.1)  5.678 ms  5.543 ms  5.432 ms\n");
+        printf(" 3  172.16.0.1 (172.16.0.1)  12.345 ms  12.234 ms  12.123 ms\n");
+        printf(" 4  8.8.8.8 (8.8.8.8)  18.456 ms  18.345 ms  18.234 ms\n\n");
+    }
+    else if (strcmp(cmd, "nmap") == 0) {
+        const char* target = argc > 1 ? args[1] : "192.168.1.1";
+        printf("\n\033[96mStarting Nmap scan on %s\033[0m\n\n", target);
+        printf("PORT     STATE SERVICE\n");
+        printf("21/tcp   open  ftp\n");
+        printf("22/tcp   open  ssh\n");
+        printf("80/tcp   open  http\n");
+        printf("443/tcp  open  https\n");
+        printf("3389/tcp open  ms-wbt-server\n");
+        printf("4444/tcp open  krb524\n\n");
+        printf("Nmap done: 1 IP address (1 host up) scanned in 0.52 seconds\n\n");
+    }
+    else if (strcmp(cmd, "portscan") == 0) {
+        const char* target = argc > 1 ? args[1] : "192.168.1.1";
+        printf("\n\033[96mScanning %s...\033[0m\n\n", target);
+        printf("Open ports:\n");
+        int ports[] = {21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 3306, 3389, 4444, 8080};
+        for (int i = 0; i < 14; i++) {
+            printf("  \033[92m%d/tcp\033[0m open\n", ports[i]);
+            sleep_ms(100);
+        }
+        printf("\nScan complete: 14 open ports found\n\n");
+    }
+    else if (strcmp(cmd, "exploit-db") == 0 || strcmp(cmd, "exploits") == 0) {
+        printf("\n\033[96m╔══════════════════════════════════════════════════════════╗\n");
+        printf("║              Cardinal Exploit Database                   ║\n");
+        printf("╚══════════════════════════════════════════════════════════╝\033[0m\n\n");
+        printf("ID     CVE            Name                              Severity\n");
+        printf("─────────────────────────────────────────────────────────────────\n");
+        printf("1      MS17-010       EternalBlue SMB RCE               \033[91mCRITICAL\033[0m\n");
+        printf("2      MS08-067       Windows Server Service RCE        \033[91mCRITICAL\033[0m\n");
+        printf("3      CVE-2021-44228 Log4Shell RCE                     \033[91mCRITICAL\033[0m\n");
+        printf("4      CVE-2014-0160  Heartbleed SSL                    \033[93mHIGH\033[0m\n");
+        printf("5      CVE-2017-5638  Apache Struts2 RCE                \033[91mCRITICAL\033[0m\n");
+        printf("6      CVE-2019-0708  BlueKeep RDP RCE                  \033[91mCRITICAL\033[0m\n");
+        printf("7      CVE-2020-1472  Zerologon Domain Takeover         \033[91mCRITICAL\033[0m\n");
+        printf("8      CVE-2021-26855 ProxyLogon Exchange RCE           \033[91mCRITICAL\033[0m\n");
+        printf("\nTotal: 200+ exploits available\n");
+        printf("Use: exploit-run <id> <target> to execute\n\n");
+    }
+    else if (strcmp(cmd, "c2-start") == 0) {
+        printf("\n\033[96mStarting Cardinal C2 Server...\033[0m\n\n");
+        printf("Initializing C2 framework...\n");
+        sleep_ms(500);
+        printf("Loading exploit modules...\n");
+        sleep_ms(500);
+        printf("Starting listener on 0.0.0.0:4444...\n");
+        sleep_ms(500);
+        printf("Starting HTTP server on 0.0.0.0:8080...\n");
+        sleep_ms(500);
+        printf("Initializing payload generator...\n");
+        sleep_ms(500);
+        printf("Loading post-exploitation modules...\n");
+        sleep_ms(500);
+        printf("\n\033[92m✓ C2 Server started successfully\033[0m\n");
+        printf("\nListeners:\n");
+        printf("  TCP: 0.0.0.0:4444 (Main C2)\n");
+        printf("  HTTP: 0.0.0.0:8080 (Web delivery)\n");
+        printf("  HTTPS: 0.0.0.0:8443 (Secure C2)\n\n");
+        audit_log("C2_START", "C2 server started");
+    }
+    else if (strcmp(cmd, "payload-gen") == 0) {
+        printf("\n\033[96mPayload Generator\033[0m\n\n");
+        printf("Available payloads:\n");
+        printf("  1. windows/meterpreter/reverse_tcp\n");
+        printf("  2. linux/x64/shell/reverse_tcp\n");
+        printf("  3. android/meterpreter/reverse_tcp\n");
+        printf("  4. python/shell_reverse_tcp\n");
+        printf("  5. php/meterpreter_reverse_tcp\n\n");
+        printf("Usage: payload-gen <type> <lhost> <lport>\n\n");
+    }
+    else if (strcmp(cmd, "scan") == 0) {
+        if (argc < 2) {
+            printf("Usage: scan <target>\n");
+        } else {
+            printf("\n\033[96mScanning %s...\033[0m\n\n", args[1]);
+            printf("Phase 1: Host discovery...\n");
+            sleep_ms(500);
+            printf("Phase 2: Port scanning...\n");
+            sleep_ms(800);
+            printf("Phase 3: Service detection...\n");
+            sleep_ms(800);
+            printf("Phase 4: Vulnerability assessment...\n");
+            sleep_ms(1000);
+            printf("\n\033[92mScan complete\033[0m\n\n");
+            printf("Results:\n");
+            printf("  Host: %s [UP]\n", args[1]);
+            printf("  OS: Windows Server 2019\n");
+            printf("  Open ports: 7\n");
+            printf("  Vulnerabilities: 3 critical, 5 high, 12 medium\n\n");
+        }
+    }
+    else if (strcmp(cmd, "touch") == 0) {
+        if (argc < 2) {
+            printf("Usage: touch <filename>\n");
+        } else {
+            create_file_advanced(args[1], "", PERM_READ | PERM_WRITE);
+            audit_log("TOUCH", args[1]);
+            printf("File created: %s\n", args[1]);
+        }
+    }
+    else if (strcmp(cmd, "echo") == 0) {
+        for (int i = 1; i < argc; i++) {
+            printf("%s", args[i]);
+            if (i < argc - 1) printf(" ");
+        }
+        printf("\n");
+    }
+    else if (strcmp(cmd, "free") == 0) {
+        printf("\n\033[96mMemory Usage:\033[0m\n");
+        printf("              total        used        free      shared  buff/cache   available\n");
+        printf("Mem:     %10zu  %10zu  %10zu           0           0  %10zu\n",
+               system_state.total_memory,
+               system_state.used_memory,
+               system_state.total_memory - system_state.used_memory,
+               system_state.total_memory - system_state.used_memory);
+        printf("Swap:             0           0           0\n\n");
+    }
+    else if (strcmp(cmd, "df") == 0) {
+        printf("\n\033[96mFilesystem Usage:\033[0m\n");
+        printf("Filesystem      Size  Used Avail Use%% Mounted on\n");
+        printf("/dev/nvme0n1p1  512M  245M  267M  48%% /\n");
+        printf("tmpfs           256M    0M  256M   0%% /tmp\n");
+        printf("C:              1.0T  450G  550G  45%% /mnt/c\n\n");
+    }
+    else if (strcmp(cmd, "mount") == 0) {
+        printf("\n\033[96mMounted Filesystems:\033[0m\n");
+        printf("/dev/nvme0n1p1 on / type ext4 (rw,relatime)\n");
+        printf("proc on /proc type proc (rw,nosuid,nodev,noexec)\n");
+        printf("sysfs on /sys type sysfs (rw,nosuid,nodev,noexec)\n");
+        printf("tmpfs on /tmp type tmpfs (rw,nosuid,nodev)\n");
+        printf("C: on /mnt/c type ntfs (rw,relatime)\n\n");
+    }
+    else if (strcmp(cmd, "kill") == 0) {
+        if (argc < 2) {
+            printf("Usage: kill <pid>\n");
+        } else {
+            int pid = atoi(args[1]);
+            bool found = false;
+            for (int i = 0; i < process_count; i++) {
+                if (processes[i].pid == pid) {
+                    processes[i].is_running = false;
+                    printf("Process %d terminated\n", pid);
+                    audit_log("KILL", args[1]);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                printf("\033[91mProcess not found: %d\033[0m\n", pid);
+            }
+        }
+    }
+    else if (strcmp(cmd, "reboot") == 0 || strcmp(cmd, "restart") == 0) {
+        printf("\033[93mRebooting system...\033[0m\n");
+        audit_log("REBOOT", "User initiated reboot");
+        sleep_ms(1000);
+        printf("System will restart now.\n");
+        sleep_ms(500);
+        exit(0);
+    }
+    else if (strcmp(cmd, "shutdown") == 0) {
+        printf("\033[93mShutting down system...\033[0m\n");
+        audit_log("SHUTDOWN", "User initiated shutdown");
+        sleep_ms(1000);
+        printf("Power off.\n");
+        sleep_ms(500);
+        exit(0);
+    }
+    else if (strcmp(cmd, "date") == 0) {
+        time_t now = time(NULL);
+        printf("%s", ctime(&now));
+    }
+    else if (strcmp(cmd, "time") == 0) {
+        time_t now = time(NULL);
+        struct tm* tm_info = localtime(&now);
+        printf("%02d:%02d:%02d\n", tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec);
+    }
+    else if (strcmp(cmd, "env") == 0 || strcmp(cmd, "set") == 0) {
+        printf("\n\033[96mEnvironment Variables:\033[0m\n");
+        printf("PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\n");
+        printf("HOME=%s\n", current_dir);
+        printf("USER=%s\n", current_user ? current_user->username : "root");
+        printf("SHELL=/bin/bash\n");
+        printf("HOSTNAME=%s\n", system_state.hostname);
+        printf("TERM=xterm-256color\n");
+        printf("CARDINAL_HOME=/cardinal\n\n");
+    }
     else if (strcmp(cmd, "clear") == 0 || strcmp(cmd, "cls") == 0) {
         kernel_clear_screen();
     }
