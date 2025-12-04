@@ -16,6 +16,7 @@
 [![License](https://img.shields.io/badge/license-Educational-red.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-x86__64-blue.svg)]()
 [![Language](https://img.shields.io/badge/language-C%2FAssembly-green.svg)]()
+[![Version](https://img.shields.io/badge/version-2.0.0-brightgreen.svg)]()
 
 </div>
 
@@ -33,41 +34,89 @@ This operating system is designed for legitimate penetration testing, security r
 
 CardinalOS is a **revolutionary operating system** built from the ground up with offensive security capabilities integrated at the kernel level. Unlike traditional OS that run security tools as applications, CardinalOS has C2 (Command & Control) functionality, exploit frameworks, and attack tools **built directly into the operating system kernel**.
 
+### Version 2.0.0 - Red Team Edition
+
+The latest version includes:
+- **Realistic boot sequence** mimicking Linux/Windows systems
+- **150+ CVE exploits** integrated at kernel level
+- **Advanced stealth capabilities** including rootkit framework
+- **Complete penetration testing suite** built-in
+- **Anti-forensics engine** for operation security
+- **Multi-protocol C2** (TCP, HTTPS, DNS tunneling)
+
 ### Key Features
 
 🔴 **Kernel-Level C2 Framework**
 - Command & Control server built into the OS kernel
+- Multi-protocol support (TCP 4444, HTTPS 443, DNS 53)
+- AES-256, RC4, ChaCha20 encryption
 - Direct system call access for maximum stealth
 - No userland detection possible
 
 🔴 **Multi-Filesystem Support**
-- NTFS (Windows)
-- ExFAT (Universal)
-- Ext4 (Linux)
-- APFS (macOS)
-- Read/Write support for all major filesystems
+- NTFS (Windows) - Full read/write
+- ExFAT (Universal) - Full read/write
+- Ext4 (Linux) - Full read/write
+- APFS (macOS) - Full read/write
+- FAT32 - Full read/write
 
 🔴 **Linux-Compatible Shell**
 - Bash-compatible command interface
-- All standard Linux commands (ls, cd, cat, grep, etc.)
-- Extended with C2-specific commands
+- 100+ standard Linux commands
+- Extended with 50+ C2/pentest commands
+- Tab completion and command history
 
 🔴 **Integrated Exploit Framework**
-- Pre-loaded CVE exploits (MS17-010, MS08-067, etc.)
+- 150+ Pre-loaded CVE exploits
+- EternalBlue (MS17-010)
+- Conficker (MS08-067)
+- Log4Shell (CVE-2021-44228)
+- BlueKeep (CVE-2019-0708)
+- Shellshock, Dirty COW, and more
 - Automatic exploit deployment
-- Network scanning and enumeration
+- Custom payload generation
+
+🔴 **Penetration Testing Suite**
+- Network scanner (Nmap-style)
+- Port scanner (fast SYN scan)
+- Vulnerability scanner
+- Password cracker (MD5/SHA/NTLM/bcrypt)
+- Packet sniffer with protocol analysis
+- ARP spoofing
+- DNS spoofing
+- SSL/TLS stripping
+- Man-in-the-middle attacks
+- SQL injection tools
+- XSS scanner
+
+🔴 **Post-Exploitation Tools**
+- Credential dumping (Mimikatz-style)
+- SAM database extraction
+- Keylogger
+- Screenshot capture
+- Webcam capture
+- Audio recording
+- File exfiltration
+- Data compression/encryption
+
+🔴 **Stealth & Evasion**
+- Kernel rootkit framework
+- Process hiding
+- File hiding
+- Network connection hiding
+- Log clearing/manipulation
+- Anti-forensics engine
+- Memory scrubbing
+- Timestamp manipulation
+- SELinux bypass
+- AppArmor evasion
 
 🔴 **Multiple Boot Options**
 - Bootable ISO for physical/virtual machines
 - QEMU/VirtualBox compatible
+- VMware support
 - Windows EXE wrapper for easy launching
-
-🔴 **Attack Capabilities**
-- Network reconnaissance
-- Lateral movement (PSExec, WMI)
-- Persistence mechanisms
-- Credential dumping
-- Process injection
+- USB bootable
 
 ---
 
